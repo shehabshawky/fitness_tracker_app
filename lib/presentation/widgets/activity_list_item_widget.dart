@@ -21,38 +21,35 @@ class ActivityListItemWidget extends StatelessWidget {
     final dateStr = DateFormat('MMM dd').format(activity.timestamp);
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF131826) : Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isDark ? const Color(0xFF222B40) : const Color(0xFFE2E8F0),
-          width: 1.1,
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+          width: 1.0,
         ),
       ),
       child: Row(
         children: [
-          // Activity Emoji/Icon tile
           Container(
-            width: 44,
-            height: 44,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.emerald.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(14),
+              color: isDark ? const Color(0xFF334155) : const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: AppTheme.emerald.withValues(alpha: 0.25),
+                color: isDark ? Colors.transparent : const Color(0xFFBFDBFE),
               ),
             ),
             child: Center(
               child: Text(
                 activity.icon,
-                style: const TextStyle(fontSize: 22),
+                style: const TextStyle(fontSize: 20),
               ),
             ),
           ),
-          const SizedBox(width: 14),
-
-          // Activity info
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,24 +60,20 @@ class ActivityListItemWidget extends StatelessWidget {
                     Text(
                       activity.type,
                       style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.2,
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       '$dateStr · $timeStr',
                       style: TextStyle(
                         fontSize: 11,
-                        color: isDark ? Colors.grey.shade400 : Colors.grey.shade500,
-                        fontWeight: FontWeight.w500,
+                        color: isDark ? Colors.grey.shade400 : const Color(0xFF64748B),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 5),
-
-                // Metrics row: Duration, Calories, Distance
+                const SizedBox(height: 4),
                 Row(
                   children: [
                     Text(
@@ -88,53 +81,42 @@ class ActivityListItemWidget extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.grey.shade300 : const Color(0xFF475569),
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
-                      '·',
-                      style: TextStyle(
-                        color: isDark ? Colors.grey.shade600 : Colors.grey.shade400,
-                      ),
-                    ),
+                    Text('·', style: TextStyle(color: isDark ? Colors.grey.shade600 : Colors.grey.shade400)),
                     const SizedBox(width: 8),
                     Text(
                       '🔥 ${activity.caloriesBurned} kcal',
                       style: const TextStyle(
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: AppTheme.calorieOrange,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.athleticCrimson,
                       ),
                     ),
                     if (activity.distanceKm != null && activity.distanceKm! > 0) ...[
                       const SizedBox(width: 8),
-                      Text(
-                        '·',
-                        style: TextStyle(
-                          color: isDark ? Colors.grey.shade600 : Colors.grey.shade400,
-                        ),
-                      ),
+                      Text('·', style: TextStyle(color: isDark ? Colors.grey.shade600 : Colors.grey.shade400)),
                       const SizedBox(width: 8),
                       Text(
                         '📍 ${activity.distanceKm!.toStringAsFixed(1)} km',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.electricCyan,
+                          fontWeight: FontWeight.w500,
+                          color: isDark ? const Color(0xFF38BDF8) : AppTheme.classicNavy,
                         ),
                       ),
                     ],
                   ],
                 ),
                 if (activity.notes.isNotEmpty) ...[
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 3),
                   Text(
                     activity.notes,
                     style: TextStyle(
                       fontSize: 11.5,
                       fontStyle: FontStyle.italic,
-                      color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                      color: isDark ? Colors.grey.shade400 : const Color(0xFF64748B),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -143,17 +125,14 @@ class ActivityListItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
-
-          // Delete button
           IconButton(
-            icon: const Icon(Icons.delete_outline_rounded, size: 20),
-            color: Colors.redAccent.withValues(alpha: 0.8),
+            icon: const Icon(Icons.delete_outline_rounded, size: 19),
+            color: Colors.redAccent,
             onPressed: () async {
               final confirmed = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                   title: const Text('Delete Activity?'),
                   content: Text('Remove this ${activity.type} workout record?'),
                   actions: [

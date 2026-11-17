@@ -59,31 +59,27 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
           appBar: AppBar(
             title: const Text(
               'Activity History',
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                fontSize: 18,
-                letterSpacing: -0.3,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             actions: [
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
                     decoration: BoxDecoration(
-                      color: AppTheme.emerald.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: AppTheme.emerald.withValues(alpha: 0.25),
+                        color: isDark ? Colors.transparent : const Color(0xFFBFDBFE),
                       ),
                     ),
                     child: Text(
-                      '$totalWorkouts logged',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w800,
+                      '$totalWorkouts entries',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         fontSize: 11.5,
-                        color: AppTheme.emerald,
+                        color: isDark ? const Color(0xFF93C5FD) : AppTheme.classicNavy,
                       ),
                     ),
                   ),
@@ -105,10 +101,10 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                   },
                   decoration: InputDecoration(
                     hintText: 'Search workouts by exercise or notes...',
-                    prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                    prefixIcon: const Icon(Icons.search, size: 20),
                     suffixIcon: _searchQuery.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear_rounded, size: 18),
+                            icon: const Icon(Icons.clear, size: 18),
                             onPressed: () {
                               _searchController.clear();
                               setState(() {
@@ -123,14 +119,14 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
 
               // Summary Stats Banner
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF131826) : Colors.white,
-                    borderRadius: BorderRadius.circular(18),
+                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: isDark ? const Color(0xFF222B40) : const Color(0xFFE2E8F0),
+                      color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
                     ),
                   ),
                   child: Row(
@@ -139,53 +135,53 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                       Column(
                         children: [
                           const Text(
-                            'WORKOUTS',
+                            'ENTRIES',
                             style: TextStyle(
                               fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppTheme.emerald,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.classicNavy,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             '$totalWorkouts',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                      Container(height: 24, width: 1, color: isDark ? const Color(0xFF26324D) : const Color(0xFFE2E8F0)),
+                      Container(height: 24, width: 1, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
                       Column(
                         children: [
                           const Text(
-                            'CALORIES',
+                            'TOTAL CALORIES',
                             style: TextStyle(
                               fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppTheme.calorieOrange,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.athleticCrimson,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             '$totalCalories kcal',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                      Container(height: 24, width: 1, color: isDark ? const Color(0xFF26324D) : const Color(0xFFE2E8F0)),
+                      Container(height: 24, width: 1, color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
                       Column(
                         children: [
                           const Text(
-                            'TOTAL TIME',
+                            'ACTIVE TIME',
                             style: TextStyle(
                               fontSize: 10,
-                              fontWeight: FontWeight.w800,
-                              color: AppTheme.electricCyan,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.forestGreen,
                             ),
                           ),
                           const SizedBox(height: 2),
                           Text(
                             '$totalMinutes min',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -193,7 +189,7 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
 
               // Activity List
               Expanded(
@@ -206,26 +202,23 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                             children: [
                               Icon(
                                 _searchQuery.isNotEmpty
-                                    ? Icons.search_off_rounded
-                                    : Icons.directions_run_outlined,
-                                size: 54,
-                                color: isDark ? Colors.grey.shade700 : Colors.grey.shade400,
+                                    ? Icons.search_off
+                                    : Icons.directions_run,
+                                size: 48,
+                                color: isDark ? Colors.grey.shade600 : Colors.grey.shade400,
                               ),
-                              const SizedBox(height: 14),
+                              const SizedBox(height: 12),
                               Text(
                                 _searchQuery.isNotEmpty
                                     ? 'No workouts matched "$_searchQuery"'
-                                    : 'No recorded activities found',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                    : 'No recorded activities',
+                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 2),
                               Text(
                                 _searchQuery.isNotEmpty
                                     ? 'Try searching with another keyword'
-                                    : 'Log your first workout session now!',
+                                    : 'Log your first workout session now',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
@@ -236,9 +229,9 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
                         ),
                       )
                     : ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 84),
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 80),
                         itemCount: filtered.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
+                        separatorBuilder: (_, _) => const SizedBox(height: 8),
                         itemBuilder: (context, index) {
                           final act = filtered[index];
                           return ActivityListItemWidget(
@@ -250,32 +243,12 @@ class _ActivityHistoryViewState extends State<ActivityHistoryView> {
               ),
             ],
           ),
-          floatingActionButton: Container(
-            decoration: BoxDecoration(
-              gradient: AppTheme.fitnessGradient,
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.emerald.withValues(alpha: 0.35),
-                  blurRadius: 16,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: FloatingActionButton.extended(
-              onPressed: _openLogActivity,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              icon: const Icon(Icons.add_rounded, color: Colors.white),
-              label: const Text(
-                'Log Activity',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                ),
-              ),
-            ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _openLogActivity,
+            backgroundColor: isDark ? const Color(0xFF2563EB) : AppTheme.classicNavy,
+            foregroundColor: Colors.white,
+            icon: const Icon(Icons.add),
+            label: const Text('Log Activity', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         );
       },

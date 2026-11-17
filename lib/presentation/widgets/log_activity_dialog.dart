@@ -111,14 +111,13 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF111622) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          color: isDark ? const Color(0xFF1E293B) : Colors.white,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           border: Border.all(
-            color: isDark ? const Color(0xFF222B40) : const Color(0xFFE2E8F0),
-            width: 1.2,
+            color: isDark ? const Color(0xFF334155) : const Color(0xFFCBD5E1),
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 28),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -126,65 +125,45 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Drag handle
                 Center(
                   child: Container(
-                    width: 44,
-                    height: 5,
+                    width: 38,
+                    height: 4,
                     decoration: BoxDecoration(
-                      color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(10),
+                      color: isDark ? Colors.grey.shade600 : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
-
-                // Modal Header
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            gradient: AppTheme.fitnessGradient,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.fitness_center_rounded, color: Colors.white, size: 20),
-                        ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'Log Fitness Activity',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      'Log Fitness Activity',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close_rounded),
+                      icon: const Icon(Icons.close_rounded, size: 20),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-
-                // Exercise Type Selector
+                const SizedBox(height: 16),
                 const Text(
                   'EXERCISE TYPE',
                   style: TextStyle(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.8,
-                    color: AppTheme.emerald,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.classicNavy,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 SizedBox(
-                  height: 64,
+                  height: 52,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _options.length,
@@ -193,48 +172,31 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
                       final opt = _options[index];
                       final isSelected = opt.name == _selectedOption.name;
 
-                      return GestureDetector(
-                        onTap: () => _onOptionSelected(opt),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                          decoration: BoxDecoration(
-                            gradient: isSelected ? AppTheme.fitnessGradient : null,
+                      return ChoiceChip(
+                        label: Text('${opt.icon} ${opt.name}'),
+                        selected: isSelected,
+                        onSelected: (_) => _onOptionSelected(opt),
+                        selectedColor: isDark ? const Color(0xFF2563EB) : AppTheme.classicNavy,
+                        labelStyle: TextStyle(
+                          color: isSelected
+                              ? Colors.white
+                              : (isDark ? Colors.grey.shade300 : const Color(0xFF334155)),
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontSize: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
                             color: isSelected
-                                ? null
-                                : (isDark ? const Color(0xFF192132) : const Color(0xFFF1F5F9)),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: isSelected
-                                  ? Colors.transparent
-                                  : (isDark ? const Color(0xFF26324D) : const Color(0xFFE2E8F0)),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(opt.icon, style: const TextStyle(fontSize: 18)),
-                              const SizedBox(height: 3),
-                              Text(
-                                opt.name,
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                                  color: isSelected
-                                      ? Colors.white
-                                      : (isDark ? Colors.grey.shade300 : const Color(0xFF334155)),
-                                ),
-                              ),
-                            ],
+                                ? Colors.transparent
+                                : (isDark ? const Color(0xFF475569) : const Color(0xFFCBD5E1)),
                           ),
                         ),
                       );
                     },
                   ),
                 ),
-                const SizedBox(height: 20),
-
-                // Duration & Calories in 2 columns
+                const SizedBox(height: 18),
                 Row(
                   children: [
                     Expanded(
@@ -243,14 +205,9 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
                         children: [
                           const Text(
                             'DURATION (MINUTES)',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.6,
-                              color: AppTheme.electricCyan,
-                            ),
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           TextFormField(
                             controller: _durationController,
                             keyboardType: TextInputType.number,
@@ -263,27 +220,22 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
                             },
                             decoration: const InputDecoration(
                               hintText: '30',
-                              prefixIcon: Icon(Icons.timer_outlined, size: 19),
+                              prefixIcon: Icon(Icons.timer_outlined, size: 18),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
                             'CALORIES (KCAL)',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.6,
-                              color: AppTheme.calorieOrange,
-                            ),
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           TextFormField(
                             controller: _caloriesController,
                             keyboardType: TextInputType.number,
@@ -295,7 +247,7 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
                             },
                             decoration: const InputDecoration(
                               hintText: '300',
-                              prefixIcon: Icon(Icons.local_fire_department_outlined, size: 19),
+                              prefixIcon: Icon(Icons.local_fire_department_outlined, size: 18),
                             ),
                           ),
                         ],
@@ -303,89 +255,58 @@ class _LogActivityDialogState extends State<LogActivityDialog> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-
-                // Distance (Optional)
+                const SizedBox(height: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'DISTANCE (KM - OPTIONAL)',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.6,
-                        color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
-                      ),
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     TextFormField(
                       controller: _distanceController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: const InputDecoration(
-                        hintText: 'e.g. 5.4',
-                        prefixIcon: Icon(Icons.route_outlined, size: 19),
+                        hintText: 'e.g. 5.0',
+                        prefixIcon: Icon(Icons.straighten_rounded, size: 18),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-
-                // Notes
+                const SizedBox(height: 14),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'NOTES / DESCRIPTION',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.6,
-                        color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
-                      ),
+                    const Text(
+                      'NOTES',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     TextFormField(
                       controller: _notesController,
                       decoration: const InputDecoration(
-                        hintText: 'e.g. Morning interval sprint',
-                        prefixIcon: Icon(Icons.edit_note_rounded, size: 21),
+                        hintText: 'e.g. Morning outdoor session',
+                        prefixIcon: Icon(Icons.note_alt_outlined, size: 18),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
-
-                // Submit Button
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.fitnessGradient,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.emerald.withValues(alpha: 0.35),
-                        blurRadius: 16,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: FilledButton(
-                    onPressed: _submit,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                const SizedBox(height: 22),
+                FilledButton(
+                  onPressed: _submit,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: isDark ? const Color(0xFF2563EB) : AppTheme.classicNavy,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Text(
-                      'Log Activity',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.2,
-                      ),
+                  ),
+                  child: const Text(
+                    'Save Workout',
+                    style: TextStyle(
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

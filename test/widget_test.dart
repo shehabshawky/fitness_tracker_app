@@ -9,16 +9,16 @@ void main() {
     await initDependencies();
   });
 
-  testWidgets('Fitness tracker app smoke test', (WidgetTester tester) async {
+  testWidgets('Classic Fitness tracker app smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(const FitnessTrackerApp());
     await tester.pumpAndSettle();
 
-    // Verify title is rendered
-    expect(find.text('PulseFit'), findsOneWidget);
+    // Verify classic title is rendered
+    expect(find.text('Fitness Tracker'), findsOneWidget);
 
     // Verify metric cards titles are rendered
     expect(find.text('STEPS'), findsOneWidget);
-    expect(find.text('BURNED'), findsOneWidget);
+    expect(find.text('CALORIES'), findsOneWidget);
     expect(find.text('ACTIVE'), findsOneWidget);
 
     // Verify quick step logger button is rendered
@@ -32,8 +32,8 @@ void main() {
     await tester.tap(find.text('+500'));
     await tester.pumpAndSettle();
 
-    // Tap Log Workout button
-    await tester.tap(find.text('Log Workout'));
+    // Tap Log button in app bar
+    await tester.tap(find.text('Log').first);
     await tester.pumpAndSettle();
 
     // Verify bottom sheet modal opened

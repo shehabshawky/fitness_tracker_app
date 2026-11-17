@@ -35,16 +35,9 @@ class _DashboardViewState extends State<DashboardView> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Row(
-              children: [
-                Text(activity.icon, style: const TextStyle(fontSize: 18)),
-                const SizedBox(width: 8),
-                Text('${activity.type} session logged!'),
-              ],
-            ),
+            content: Text('${activity.icon} ${activity.type} logged successfully!'),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: AppTheme.emerald,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            backgroundColor: AppTheme.classicNavy,
           ),
         );
       }
@@ -63,7 +56,7 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final todayFormatted = DateFormat('EEEE, MMM d').format(DateTime.now());
+    final todayFormatted = DateFormat('EEEE, MMMM d').format(DateTime.now());
 
     return ListenableBuilder(
       listenable: widget.viewModel,
@@ -71,7 +64,7 @@ class _DashboardViewState extends State<DashboardView> {
         if (widget.viewModel.isLoading) {
           return const Scaffold(
             body: Center(
-              child: CircularProgressIndicator(color: AppTheme.emerald),
+              child: CircularProgressIndicator(color: AppTheme.classicNavy),
             ),
           );
         }
@@ -80,82 +73,42 @@ class _DashboardViewState extends State<DashboardView> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Row(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.fitnessGradient,
-                    borderRadius: BorderRadius.circular(11),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.emerald.withValues(alpha: 0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+                const Text(
+                  'Fitness Tracker',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                  child: const Icon(Icons.bolt_rounded, color: Colors.white, size: 20),
                 ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'PulseFit',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 18,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    Text(
-                      todayFormatted,
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                Text(
+                  todayFormatted,
+                  style: TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.normal,
+                    color: isDark ? Colors.grey.shade400 : const Color(0xFF64748B),
+                  ),
                 ),
               ],
             ),
             actions: [
               IconButton(
-                tooltip: 'All Activities History',
+                tooltip: 'Activity History',
                 icon: const Icon(Icons.history_rounded),
                 onPressed: _openHistory,
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 12),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: AppTheme.fitnessGradient,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.emerald.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: TextButton.icon(
-                    onPressed: _openLogActivity,
-                    icon: const Icon(Icons.add_rounded, color: Colors.white, size: 18),
-                    label: const Text(
-                      'Log',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 13,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                      visualDensity: VisualDensity.compact,
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    ),
+                child: FilledButton.icon(
+                  onPressed: _openLogActivity,
+                  icon: const Icon(Icons.add, size: 16),
+                  label: const Text('Log'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: isDark ? const Color(0xFF2563EB) : AppTheme.classicNavy,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                 ),
               ),
@@ -163,11 +116,11 @@ class _DashboardViewState extends State<DashboardView> {
           ),
           body: SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 3 Key Metrics Cards
+                  // 3 Classic Metric Cards
                   Row(
                     children: [
                       Expanded(
@@ -175,55 +128,48 @@ class _DashboardViewState extends State<DashboardView> {
                           title: 'Steps',
                           icon: '👟',
                           value: NumberFormat('#,###').format(widget.viewModel.todaySteps),
-                          goalText: 'Goal: 10,000',
+                          goalText: 'of 10,000 goal',
                           progress: widget.viewModel.stepsProgress,
-                          progressGradient: const LinearGradient(
-                            colors: [Color(0xFF10B981), Color(0xFF34D399)],
-                          ),
-                          accentColor: AppTheme.emerald,
+                          accentColor: isDark ? const Color(0xFF38BDF8) : AppTheme.royalBlue,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: MetricCardWidget(
-                          title: 'Burned',
+                          title: 'Calories',
                           icon: '🔥',
                           value: '${widget.viewModel.todayCaloriesBurned}',
                           unit: 'kcal',
-                          goalText: 'Goal: 650 kcal',
+                          goalText: 'of 650 kcal goal',
                           progress: widget.viewModel.caloriesProgress,
-                          progressGradient: AppTheme.calorieGradient,
-                          accentColor: AppTheme.calorieOrange,
+                          accentColor: AppTheme.athleticCrimson,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: MetricCardWidget(
                           title: 'Active',
                           icon: '⏱️',
                           value: '${widget.viewModel.todayActiveMinutes}',
                           unit: 'min',
-                          goalText: 'Goal: 45 min',
+                          goalText: 'of 45 min goal',
                           progress: widget.viewModel.activeMinutesProgress,
-                          progressGradient: const LinearGradient(
-                            colors: [Color(0xFF06B6D4), Color(0xFF38BDF8)],
-                          ),
-                          accentColor: AppTheme.electricCyan,
+                          accentColor: AppTheme.forestGreen,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
 
-                  // Quick Steps Tracker Widget
+                  // Quick Steps Tracker
                   Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF131826) : Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                      borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isDark ? const Color(0xFF222B40) : const Color(0xFFE2E8F0),
-                        width: 1.1,
+                        color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+                        width: 1.0,
                       ),
                     ),
                     child: Row(
@@ -233,20 +179,19 @@ class _DashboardViewState extends State<DashboardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'QUICK STEP LOGGER',
+                              'QUICK STEPS LOGGER',
                               style: TextStyle(
                                 fontSize: 10.5,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0.6,
-                                color: AppTheme.emerald,
+                                fontWeight: FontWeight.bold,
+                                color: AppTheme.classicNavy,
                               ),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Tap to log walk or run steps',
+                              'Log daily steps recorded',
                               style: TextStyle(
-                                fontSize: 12,
-                                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                                fontSize: 11.5,
+                                color: isDark ? Colors.grey.shade400 : const Color(0xFF64748B),
                               ),
                             ),
                           ],
@@ -256,58 +201,47 @@ class _DashboardViewState extends State<DashboardView> {
                             OutlinedButton(
                               onPressed: () => widget.viewModel.addSteps(500),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 visualDensity: VisualDensity.compact,
                               ),
-                              child: const Text('+500', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
+                              child: const Text('+500', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                             ),
                             const SizedBox(width: 6),
                             OutlinedButton(
                               onPressed: () => widget.viewModel.addSteps(1000),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                 visualDensity: VisualDensity.compact,
                               ),
-                              child: const Text('+1,000', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
+                              child: const Text('+1,000', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                             ),
                             const SizedBox(width: 6),
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: AppTheme.fitnessGradient,
-                                borderRadius: BorderRadius.circular(12),
+                            FilledButton(
+                              onPressed: () => widget.viewModel.addSteps(2500),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: isDark ? const Color(0xFF2563EB) : AppTheme.classicNavy,
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                visualDensity: VisualDensity.compact,
                               ),
-                              child: TextButton(
-                                onPressed: () => widget.viewModel.addSteps(2500),
-                                style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                  visualDensity: VisualDensity.compact,
-                                ),
-                                child: const Text(
-                                  '+2,500',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
+                              child: const Text('+2,500', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 14),
 
-                  // Weekly Bar Chart Widget
+                  // Weekly Activity Chart
                   WeeklyChartWidget(
                     weeklySummaries: widget.viewModel.weeklySummaries,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
 
-                  // Today's Workouts Section Header
+                  // Today's Workouts Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -315,61 +249,60 @@ class _DashboardViewState extends State<DashboardView> {
                         "TODAY'S WORKOUTS (${todayList.length})",
                         style: const TextStyle(
                           fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
-                          color: AppTheme.emerald,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                          color: AppTheme.classicNavy,
                         ),
                       ),
                       TextButton(
                         onPressed: _openHistory,
-                        child: const Text(
+                        child: Text(
                           'View All',
                           style: TextStyle(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w700,
-                            color: AppTheme.electricCyan,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? const Color(0xFF60A5FA) : AppTheme.classicNavy,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
 
-                  // Activities List or Empty State
+                  // Workouts List
                   if (todayList.isEmpty)
                     Container(
-                      padding: const EdgeInsets.all(28),
+                      padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF131826) : Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: isDark ? const Color(0xFF222B40) : const Color(0xFFE2E8F0),
+                          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.fitness_center_outlined,
-                            size: 44,
-                            color: isDark ? Colors.grey.shade700 : Colors.grey.shade400,
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'No workouts logged today',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.fitness_center_outlined,
+                              size: 36,
+                              color: isDark ? Colors.grey.shade600 : Colors.grey.shade400,
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Tap "Log" in the top bar to record your exercise',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                            const SizedBox(height: 8),
+                            const Text(
+                              'No workouts logged today',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 2),
+                            Text(
+                              'Tap "Log" to record your fitness activities',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   else
@@ -377,7 +310,7 @@ class _DashboardViewState extends State<DashboardView> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: todayList.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         final act = todayList[index];
                         return ActivityListItemWidget(
@@ -392,32 +325,12 @@ class _DashboardViewState extends State<DashboardView> {
               ),
             ),
           ),
-          floatingActionButton: Container(
-            decoration: BoxDecoration(
-              gradient: AppTheme.fitnessGradient,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.emerald.withValues(alpha: 0.35),
-                  blurRadius: 18,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: FloatingActionButton.extended(
-              onPressed: _openLogActivity,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              icon: const Icon(Icons.add_rounded, color: Colors.white),
-              label: const Text(
-                'Log Workout',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 14,
-                ),
-              ),
-            ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: _openLogActivity,
+            backgroundColor: isDark ? const Color(0xFF2563EB) : AppTheme.classicNavy,
+            foregroundColor: Colors.white,
+            icon: const Icon(Icons.add),
+            label: const Text('Log Activity', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         );
       },
